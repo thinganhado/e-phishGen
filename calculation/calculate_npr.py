@@ -2,10 +2,10 @@ r"""Calculate per-email NPR using local causal and mask-filling models.
 
 Example:
 python calculate_npr.py `
-  --dataset C:\Users\Admin\Documents\GitHub\e-phishGen\dataset `
-  --base-model C:\Users\Admin\Documents\LLMs\gpt2-xl `
-  --mask-model C:\Users\Admin\Documents\LLMs\t5-large `
-  --output C:\Users\Admin\Documents\GitHub\e-phishGen\dataset\npr_results.json
+  --dataset D:\AI\projects\e-phishGen\dataset `
+  --base-model E:\AI\models\gpt2-xl `
+  --mask-model E:\AI\models\t5-large `
+  --output D:\AI\projects\e-phishGen\dataset\npr_results.json
 """
 
 import argparse
