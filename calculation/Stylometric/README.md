@@ -47,9 +47,9 @@ Required by `preprocess/continuous_n_gram_AA` and the discourse vectorizers:
 - [ ] `nltk==3.0.4` and compatible NLTK data.
 - [ ] A Pandas version compatible with Python 2.7 and the old APIs used by the
       discourse scripts.
-- [ ] The original continuous-n-gram training vocabulary and character-ID
-      mapping; these must be fitted on training data, not on the 44 evaluation
-      samples.
+- [x] The original continuous-n-gram training/model scripts are restored under
+      `preprocess/continuous_n_gram_AA`; fitted vocabularies and checkpoints
+      remain dataset-specific artifacts and must be fitted on training data.
 - [ ] The original continuous-n-gram neural weights/checkpoint if inference
       rather than retraining is intended.
 
@@ -68,11 +68,13 @@ and RhymeTagger:
 - [ ] `scikit-learn<0.20` for the removed `sklearn.cross_validation` import.
 - [ ] A repair for `preprocess/Authorship_Attribution_Short_Texts/predict_def.py`
       (currently fails compilation with an indentation error near line 115).
-- [ ] The original `dataset.csv` and its author/class labels for the short-text
-      repository.
+- [x] The original `dataset.csv` is restored under
+      `preprocess/Authorship_Attribution_Short_Texts/data/`.
 - [ ] Any original trained short-text classifier or embedding checkpoint.
-- [ ] The missing ancient-Greek support modules referenced by the scripts:
-      `download_corpus.py`, `corpus_categories.py`, and `greek_features.py`.
+- [x] `download_corpus.py`, `corpus_categories.py`, and `create_dataset.py` are
+      restored under `preprocess/ancient_greek_genre_classification`.
+- [ ] `greek_features.py` is not part of the original checkout; it comes from
+      the external `qcrit` package.
 - [ ] The Tesserae corpus and its expected directory layout for `qcrit`.
 - [ ] The original ancient-Greek feature configuration and language resources;
       this pipeline is not directly applicable to the English phishing data.
@@ -84,19 +86,19 @@ The following RhymeTagger resources have already been recovered locally:
 
 Required by GenderPrediction-JAVA, TopicModel4J, and discourse-grid builders:
 
-- [ ] The original GenderPrediction-JAVA `libs/` directory, especially the
-      exact Weka, Stanford POS tagger, and SLF4J versions used by the project.
+- [x] The original `libs/` and `taggers/` are restored under
+      `preprocess/GenderPrediction_JAVA`.
 - [ ] GenderPrediction-JAVA data files:
       `data/gendercombined.model`, `data/Gender_LadTree.model`,
       `data/Age_RandomForest.model`, `data/age.model`, ARFF files, truth data,
       and the original corpus directory.
-- [ ] `TopicModel4J/com/topic/utils/FuncUtils.java`, imported by
-      `AuthorTM.java` but absent from this checkout.
+- [x] `FuncUtils.java` is restored under
+      `preprocess/TopicModel4J/src/main/java/com/topic/utils/`.
 - [ ] TopicModel4J input corpus files, stopword file, vocabulary, and the
       original author-topic settings/checkpoints if exact reproduction is
       required.
-- [ ] `authorship_attribution_discourse/entityGrid/NounPhrase.java`, imported
-      by `BuildRSTGrid.java` but absent from this checkout.
+- [x] `NounPhrase.java` and `IntPair.java` are restored under the discourse
+      preprocessing directory.
 - [ ] The complete RST parser source, parser models, fine-grained relation
       label CSVs, and parser configuration.
 - [ ] Coreference/parser model resources and the exact Stanford CoreNLP
@@ -105,22 +107,17 @@ Required by GenderPrediction-JAVA, TopicModel4J, and discourse-grid builders:
       Python vector calculators.
 
 Java 8, Stanford CoreNLP 3.6.0, CoreNLP models, Stanford POS tagger resources,
-Commons Math, SLF4J, and Weka have been downloaded under the local
-`external/` directory, but the project-specific source/data items above are
-still missing.
+Commons Math, SLF4J, and Weka are still external runtime requirements. The
+GenderPrediction-JAVA JARs and tagger model are now included under its
+preprocessing directory; CoreNLP/RST resources are not bundled.
 
 ### LDA-C and topic features
 
-The checked-in `preprocess/lda_c` directory is incomplete. The following
-original LDA-C sources are missing:
+The checked-in `preprocess/lda_c` directory now contains the original LDA-C
+source files, headers, Makefile, and settings. A fitted vocabulary and model
+outputs are still required:
 
-- [ ] `lda-estimate.c`
-- [ ] `lda-model.c`
-- [ ] `lda-inference.c`
-- [ ] `utils.c`
-- [ ] `cokus.c`
-- [ ] `lda-alpha.c`
-- [ ] The complete LDA-C Makefile in the build directory.
+- [x] Original LDA-C C sources, headers, Makefile, and settings.
 - [ ] A fitted LDA vocabulary and sparse document-word representation.
 - [ ] Fitted `.beta`, `.gamma`, likelihood, and word-assignment outputs using
       one fixed topic count and vocabulary.
@@ -143,8 +140,8 @@ document-topic features for the 44 samples.
 
 - [ ] Fix the indentation error in `Authorship_Attribution_Short_Texts/predict_def.py`.
 - [ ] Fix inconsistent tabs/spaces in the Python discourse vectorizers.
-- [ ] Restore missing Java source files listed above.
-- [ ] Restore missing LDA-C source files listed above.
+- [x] Restore missing Java source files listed above.
+- [x] Restore missing LDA-C source files listed above.
 - [ ] Replace hard-coded historical paths and input filenames with paths under
       this project.
 - [ ] Add tests for empty documents, one-sentence documents, short texts, and
