@@ -14,6 +14,9 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 
+MODEL_PATH = r"E:\AI\models\gpt2-xl"
+
+
 def load_records(path):
     raw = Path(path).read_text(encoding="utf-8-sig").strip()
     try:
@@ -80,7 +83,6 @@ def calculate_metrics(text, model, tokenizer, device, top_k, max_length):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", required=True)
-    parser.add_argument("--model", required=True)
     parser.add_argument("--output", required=True)
     parser.add_argument("--top-k", type=int, default=10)
     parser.add_argument("--max-length", type=int, default=1024)
@@ -91,9 +93,9 @@ def main():
     if device.type == "cuda" and not torch.cuda.is_available():
         raise RuntimeError("CUDA was requested but is not available")
 
-    print(f"Loading model: {args.model}")
-    tokenizer = AutoTokenizer.from_pretrained(args.model, local_files_only=True)
-    model = AutoModelForCausalLM.from_pretrained(args.model, local_files_only=True).to(device).eval()
+    print(f"Loading local model: {MODEL_PATH}")
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, local_files_only=True)
+    model = AutoModelForCausalLM.from_pretrained(MODEL_PATH, local_files_only=True).to(device).eval()
     records = load_records(args.dataset)
     print(f"Loaded {len(records)} samples")
 
