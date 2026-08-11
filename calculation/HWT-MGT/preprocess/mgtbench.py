@@ -22,10 +22,12 @@ def prepare_text(text: str, tokenizer, metric: str):
     raise ValueError(f"unknown MGTBench metric preparation: {metric}")
 
 
-def prepare_file(path: str, metric: str, text_column: str = "text"):
+def prepare_file(path: str, metric: str, text_column: str = "text",
+                 model_name: str = DEFAULT_MODEL, cache_dir: str | None = None,
+                 device: str | None = None):
     """Read a MGTBench-style file and return records plus prepared token batches."""
     records = read_records(path, text_column=text_column)
-    _, tokenizer = load_model()
+    _, tokenizer = load_model(model_name, cache_dir=cache_dir, device=device)
     return records, [prepare_text(str(record[text_column]), tokenizer, metric) for record in records]
 
 

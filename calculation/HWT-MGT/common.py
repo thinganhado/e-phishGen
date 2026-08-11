@@ -47,7 +47,10 @@ def observed_ranks(logits, labels, one_based=True):
     logits, labels = aligned_logits_labels(logits, labels)
     order = torch.argsort(logits, dim=-1, descending=True)
     matches = order.eq(labels[:, None])
-    if not matches.all(dim=1).all():
+    # Each observed label must occur in its row of sorted vocabulary IDs.
+    # ``all(dim=1)`` would incorrectly require every vocabulary position to
+    # equal the observed label and reject every normal sequence.
+    if not matches.any(dim=1).all():
         raise ValueError("every observed label must be present in the vocabulary")
     ranks = matches.float().argmax(dim=1)
     return ranks + 1 if one_based else ranks

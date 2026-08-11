@@ -24,32 +24,35 @@ prefix, and the copied DetectLLM requirements include Linux CUDA wheels and
 DeepSpeed. Treat both as provenance records rather than Windows installation
 files.
 
-## Minimum practical environment count
+## Final CUDA environments
 
-For `e-phishGen` metric work, the minimum practical count is **two Python
-environments**:
+The four final environments use Python 3.13 and the tested CUDA stack
+`torch==2.11.0+cu128` with CUDA 12.8. This is the supported setup for the
+RTX 5090 in this workspace:
 
 | Environment | Use for | Reason |
 |---|---|---|
-| `metric-core-py38.txt` | MGTBench, detecting-fake-text metric code, DetectGPT, DNA-GPT, DetectLLM, Fast-DetectGPT, and the Hugging Face perplexity preparation | Shares the PyTorch 1.13-era stack and a common Transformers 4.28.1 interface. MGTBench's older 4.24 pin is relaxed here because the documented metric APIs are compatible. |
-| `gptwho-gptid-py38.txt` | GPT-Who and GPTID | Preserves GPT-Who's PyTorch 2.0.1/Transformers 4.30.0 pins and adds GPTID's SciPy/scikit-dimension dependencies. |
+| `metric-core-py38.txt` | MGTBench, detecting-fake-text metric code, DetectGPT, DNA-GPT, DetectLLM, Fast-DetectGPT, and intrinsic-dimension metrics | Consolidated CUDA environment; the filename is retained for compatibility with existing references. |
+| `gptwho-gptid-py38.txt` | GPT-Who and GPTID | Uses the same tested CUDA stack and includes `scikit-dimension`. |
+| `detecting-fake-text-server-optional.txt` | GLTR plus the optional detecting-fake-text server | Includes Transformers because GLTR loads GPT-2 through Transformers. |
+| `huggingface-perplexity-reference.txt` | Hugging Face perplexity reference | Minimal CUDA-enabled reference environment. |
 
 The detecting-fake-text web server can use the first environment after
 installing `detecting-fake-text-server-optional.txt`. Its JavaScript client
 has a separate `npm install` workflow and is not a Python dependency.
 
-`huggingface-perplexity-reference.txt` records the standalone dependencies
-for the Hugging Face reference; those packages are already covered by the
-core environment.
+All four environments were tested with local model paths under
+`E:\AI\models`. Each passed `pip check`, CUDA initialization, and a model
+forward pass on the RTX 5090. The direct dependencies are pinned in the four
+requirement files.
 
-## Why not one environment?
+## Why retain four environments?
 
-A single modern environment may work if exact source-version reproduction is
-not required. It is not the recommended baseline here because GPT-Who pins
-PyTorch 2.0.1/Transformers 4.30.0, while MGTBench and DetectLLM were released
-against PyTorch 1.13.1 and older/different Transformers versions. Keeping two
-environments makes the source differences explicit and avoids silently
-changing tokenization or model-loading behavior.
+A single modern environment may work, but the four files preserve the
+original calculation groupings while sharing a known-good CUDA baseline.
+They are execution environments rather than strict historical reproductions;
+the old Python 3.8/PyTorch pins were incompatible with the repository's
+Python 3.10-style type annotations and the RTX 5090.
 
 For strict reproduction of every repository's historical lockfile, use the
 copied files under `original/` directly. That requires more than two isolated
@@ -59,11 +62,11 @@ requirements intentionally contain incompatible historical pins.
 ## Installation examples
 
 ```powershell
-python -m venv .venv-metric-core
-.\.venv-metric-core\Scripts\python.exe -m pip install -r calculation\HWT-MGT\requirements\metric-core-py38.txt
+mamba create -n hwt_metric_core python=3.13 pip -y
+mamba run -n hwt_metric_core python -m pip install -r calculation\HWT-MGT\requirements\metric-core-py38.txt
 
-python -m venv .venv-gptwho-gptid
-.\.venv-gptwho-gptid\Scripts\python.exe -m pip install -r calculation\HWT-MGT\requirements\gptwho-gptid-py38.txt
+mamba create -n hwt_gptwho_gptid python=3.13 pip -y
+mamba run -n hwt_gptwho_gptid python -m pip install -r calculation\HWT-MGT\requirements\gptwho-gptid-py38.txt
 ```
 
 The original DNA-GPT utilities also load the spaCy model `en_core_web_sm`;

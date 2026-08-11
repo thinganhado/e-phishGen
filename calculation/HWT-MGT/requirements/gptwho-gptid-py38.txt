@@ -1,12 +1,16 @@
-# Separate environment for source-faithful GPT-Who/GPTID execution.
-# Python: 3.8
-# GPT-Who pins PyTorch 2.0.1 and Transformers 4.30.0.
+# Final CUDA environment for GPT-Who and GPTID.
+# Python: 3.13+
+# Tested with an NVIDIA RTX 5090 and CUDA 12.8.
+# The old py38 label is retained for compatibility with existing references.
 
-numpy==1.24.3
-pandas==2.0.2
-scikit-learn==1.2.2
-torch==2.0.1
-tqdm==4.65.0
-transformers==4.30.0
-scipy
-scikit-dimension
+--extra-index-url https://download.pytorch.org/whl/cu128
+torch==2.11.0+cu128
+transformers==5.14.1
+numpy==2.4.6
+pandas==3.0.5
+scikit-learn==1.9.0
+scipy==1.18.0
+scikit-dimension==0.3.7
+numba==0.65.1
+llvmlite==0.47.0
+tqdm==4.67.3

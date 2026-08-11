@@ -31,6 +31,15 @@ def read_records(path: str | Path, text_column: str = "text", label_column: str 
             texts = value[text_column]
             labels = value.get(label_column, [None] * len(texts))
             return [{text_column: text, label_column: label} for text, label in zip(texts, labels)]
+        if isinstance(value, dict) and isinstance(value.get("samples"), list):
+            # e-phishGen datasets store metadata alongside the actual records:
+            # {"source": ..., "samples": [{"text": ..., ...}, ...]}.
+            # Preserve the complete sample dictionaries so sample_id, labels,
+            # groups, and strata remain available to the result writer.
+            return [
+                item if isinstance(item, dict) else {text_column: item}
+                for item in value["samples"]
+            ]
         if isinstance(value, dict):
             return [value]
         return [{text_column: value}]

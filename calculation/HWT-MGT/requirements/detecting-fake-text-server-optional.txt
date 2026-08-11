@@ -1,8 +1,14 @@
-# Optional Python packages for the detecting-fake-text Flask/Connexion UI.
-# They are not needed by the GLTR calculation adapter itself.
+# Final CUDA environment for detecting-fake-text/GLTR and its optional server.
+# Python: 3.13+
+# The original file was server-only; Transformers is included because the
+# GLTR adapter loads GPT-2 through Transformers.
 
-pytorch-pretrained-bert>=0.6.1
-connexion[swagger-ui]
-flask
-PyYAML
-flask-cors
+--extra-index-url https://download.pytorch.org/whl/cu128
+torch==2.11.0+cu128
+transformers==5.14.1
+numpy==2.4.6
+pytorch-pretrained-bert==0.6.2
+connexion[swagger-ui]==3.3.0
+flask==3.1.3
+PyYAML==6.0.3
+flask-cors==6.0.5
