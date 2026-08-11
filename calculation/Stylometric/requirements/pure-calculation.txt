@@ -1,0 +1,3 @@
+# The calculation-only scripts in ../ use Python standard-library features.
+# No third-party environment is required for the scripts listed in
+# ../README.md; model inference and preprocessing use the environments above.

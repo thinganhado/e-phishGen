@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+sklearn = "*"
+numpy = "*"
+scipy = "*"
+nltk = "*"
+qcrit = "==0.0.21"
+tqdm = "*"
+
+[dev-packages]
+pylint = "*"
+
+[requires]
+python_version = "3.6"

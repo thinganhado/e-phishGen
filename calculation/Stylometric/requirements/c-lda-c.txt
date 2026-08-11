@@ -1,0 +1,7 @@
+# lda-c is a standalone C program, not a Python environment.
+# Required toolchain:
+#   gcc (or another C compiler)
+#   make
+#   system libm/math library
+# Build command from the original Makefile:
+#   make lda

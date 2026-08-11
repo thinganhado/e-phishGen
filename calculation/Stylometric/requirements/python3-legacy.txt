@@ -1,0 +1,18 @@
+# Shared Python 3.6-era environment proposal.
+# Authorship-Attribution-of-Short-Texts README dependencies:
+numpy
+pandas
+keras==1.1.1
+scikit-learn<0.20
+
+# ancient_greek_genre_classification Pipfile:
+scipy
+nltk
+qcrit==0.0.21
+tqdm
+
+# RhymeTagger source imports:
+ujson
+
+# RhymeTagger itself is normally installed from PyPI or its source checkout.
+# eSpeak NG is an external executable, not a pip dependency.

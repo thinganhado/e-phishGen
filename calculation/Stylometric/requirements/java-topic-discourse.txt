@@ -1,0 +1,20 @@
+# Java environment shared by the Java-based preprocessing projects.
+# Recommended runtime: JDK 8 (historical Stanford 3.6 compatibility).
+
+# TopicModel4J pom.xml dependencies:
+edu.stanford.nlp:stanford-corenlp:3.6.0
+edu.stanford.nlp:stanford-corenlp:3.6.0:models
+org.apache.commons:commons-math3:3.6
+junit:junit:3.8.1  # test scope only
+
+# GenderPrediction-JAVA bundled runtime JARs:
+# libs/weka.jar
+# libs/stanford-postagger-3.6.0.jar
+# libs/stanford-postagger.jar
+# libs/slf4j-api.jar
+# libs/slf4j-simple.jar
+
+# authorship-attribution-discourse requires Stanford CoreNLP classes/models
+# for BuildEntityGrid.java and BuildRSTGrid.java. Use one compatible
+# CoreNLP distribution on the runtime classpath and verify the neural coref
+# model version before running it.
