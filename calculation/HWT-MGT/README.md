@@ -2,6 +2,8 @@
 
 These modules implement the metric calculations documented in the repository-level [`METRICS.md`](https://github.com/). They intentionally do not preprocess text or load models. Source-specific model loading, file reading, tokenization, and input preparation adapters are in [`preprocess/`](preprocess/README.md).
 
+Dependency declarations copied from the original repositories, together with the recommended two-environment split, are in [`requirements/`](requirements/README.md).
+
 The caller must provide the required prepared values:
 
 - `logits` and next-token `labels` for probability, entropy, rank, and rank-bucket metrics;

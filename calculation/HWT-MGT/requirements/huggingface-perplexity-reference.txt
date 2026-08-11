@@ -1,0 +1,4 @@
+# Dependencies used by the Hugging Face fixed-length perplexity example.
+torch
+transformers
+datasets

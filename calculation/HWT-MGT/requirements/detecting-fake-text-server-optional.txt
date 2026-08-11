@@ -1,0 +1,8 @@
+# Optional Python packages for the detecting-fake-text Flask/Connexion UI.
+# They are not needed by the GLTR calculation adapter itself.
+
+pytorch-pretrained-bert>=0.6.1
+connexion[swagger-ui]
+flask
+PyYAML
+flask-cors

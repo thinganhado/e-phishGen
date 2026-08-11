@@ -1,0 +1,20 @@
+# Consolidated environment for the e-phishGen HWT/MGT metric adapters.
+# Python: 3.8
+# This is intentionally smaller than MGTBench/DetectLLM's full research envs.
+# PyTorch 1.13.1 is the common source-era baseline for MGTBench/DetectLLM.
+
+torch==1.13.1
+transformers==4.28.1
+datasets==2.12.0
+numpy==1.23.5
+pandas==1.5.3
+scipy==1.9.3
+scikit-learn==1.2.2
+scikit-dimension
+sentencepiece==0.1.97
+tqdm==4.64.1
+matplotlib==3.6.2
+nltk==3.8.1
+rouge-score
+openai==0.26.5
+spacy
