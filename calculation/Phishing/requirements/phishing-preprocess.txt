@@ -1,0 +1,17 @@
+# Original code/requirements.txt
+pandas
+tqdm
+openai
+
+# Required by 05_extract_features.py but omitted from the original manifest
+spacy
+
+# Required by the evaluation/figure scripts, if those are also run
+scikit-learn
+xgboost
+shap
+matplotlib
+seaborn
+
+# External model, installed separately:
+# python -m spacy download en_core_web_sm
