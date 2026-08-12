@@ -32,7 +32,14 @@ def load_model(model_name: str = DEFAULT_MODEL, cache_path: str | None = None, d
 def prepare_text(text: str, tokenizer):
     import torch
     # Original GPT-Who prepends the tokenizer EOS token before scoring.
-    encoded = tokenizer(tokenizer.eos_token + text, return_tensors="pt")
+    # GPT-2-family models have a 1024-token context window.  The old adapter
+    # allowed longer inputs through, which can trigger a CUDA device assert.
+    encoded = tokenizer(
+        tokenizer.eos_token + text,
+        return_tensors="pt",
+        truncation=True,
+        max_length=1024,
+    )
     return {key: value for key, value in encoded.items()}
 
 

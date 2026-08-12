@@ -177,7 +177,13 @@ def calculate_uid(result, text, model, tokenizer):
         try:
             put(result, name, fn(values))
         except Exception as exc:
-            fail(result, name, exc)
+            # Short inputs may not contain a complete 50-token UID span.
+            # Preserve the metric as an empty vector so this is not treated
+            # as a failed model run; downstream summaries can omit it.
+            if "at least one complete span" in str(exc):
+                put(result, name, [])
+            else:
+                fail(result, name, exc)
 
 
 def calculate_embeddings(result, text, model, tokenizer):
@@ -264,12 +270,13 @@ def calculate_dna(result, text, model, tokenizer):
 def write_outputs(results, metadata):
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     payload = {"metadata": metadata, "results": results}
-    json_path = OUTPUT_DIR / "matched_pool_44_metrics.json"
-    md_path = OUTPUT_DIR / "matched_pool_44_metrics.md"
+    output_stem = DATASET.stem
+    json_path = OUTPUT_DIR / f"{output_stem}_metrics.json"
+    md_path = OUTPUT_DIR / f"{output_stem}_metrics.md"
     json_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False, default=scalarize), encoding="utf-8")
 
     metric_names = sorted({name for row in results for name in row["metrics"]})
-    lines = ["# HWT/MGT metrics: matched_pool_44", "", "## Metadata", "", "```json", json.dumps(metadata, indent=2), "```", ""]
+    lines = [f"# HWT/MGT metrics: {output_stem}", "", "## Metadata", "", "```json", json.dumps(metadata, indent=2), "```", ""]
     for metric in metric_names:
         lines.extend([f"## {metric}", "", "| sample_id | group | value |", "|---|---|---:|"])
         for row in results:
