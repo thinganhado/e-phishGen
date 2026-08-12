@@ -1,0 +1,25 @@
+{
+  "dataset_id": "scaled_8980",
+  "independence_group": "ephishgen_hwt_mgt_corpora",
+  "samples": "../scaled_stratified_pool_8980.json",
+  "output": "results/scaled_8980",
+  "metrics": [
+    {
+      "family": "phishing",
+      "path": "../calculation/Phishing/results/scaled_stratified_pool_8980_phishing_metrics.json",
+      "signature": "phishing_v1_spacy_en_core_web_sm"
+    },
+    {
+      "family": "stylometric",
+      "path": "../calculation/Stylometric/results/scaled_stratified_pool_8980_stylometric_metrics.json",
+      "signature": "stylometric_v1_nltk_lda5_dataset_fitted"
+    }
+  ],
+  "alpha": 0.05,
+  "equivalence_bound": 0.2,
+  "minimum_effect": 0.2,
+  "min_cell_n": 1,
+  "length_sensitivity": false,
+  "length_reference_words": 100,
+  "allow_partial": false
+}

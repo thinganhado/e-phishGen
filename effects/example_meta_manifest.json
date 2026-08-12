@@ -1,0 +1,17 @@
+{
+  "inputs": [
+    "results/dataset_a/within_effects.json",
+    "results/dataset_b/within_effects.json",
+    "results/dataset_c/within_effects.json"
+  ],
+  "output": "results/cross_dataset_meta",
+  "variant": "sample_weighted",
+  "alpha": 0.05,
+  "equivalence_bound": 0.2,
+  "minimum_effect": 0.2,
+  "minimum_direction_consistency": 0.8,
+  "neutral_bound": 0.0,
+  "allow_dependent": false,
+  "allow_provisional": false,
+  "include_lda": false
+}

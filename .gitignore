@@ -1,1 +1,3 @@
 /calculation/Stylometric/external
+__pycache__/
+*.py[cod]
