@@ -16,3 +16,5 @@ pooler.dense.bias         | MISSING    |
 Notes:
 - UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
 - MISSING:	those params were newly initialized because missing from the checkpoint. Consider training on your downstream task.
+Loading weights:   0%|          | 0/292 [00:00<?, ?it/s]Loading weights: 100%|##########| 292/292 [00:00<00:00, 4408.11it/s]
+Loading weights:   0%|          | 0/509 [00:00<?, ?it/s]Loading weights:  46%|####6     | 236/509 [00:00<00:00, 2352.93it/s]Loading weights:  97%|#########6| 493/509 [00:00<00:00, 2475.30it/s]Loading weights: 100%|##########| 509/509 [00:00<00:00, 2493.78it/s]

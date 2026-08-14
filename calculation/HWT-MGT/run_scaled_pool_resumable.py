@@ -10,6 +10,7 @@ from __future__ import annotations
 import gc
 import json
 import math
+import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -23,18 +24,27 @@ ROOT = HERE.parents[1]
 sys.path.insert(0, str(HERE))
 import run_matched_pool_44 as runner
 
-runner.DATASET = ROOT / "scaled_stratified_pool_8980.json"
+runner.DATASET = ROOT / os.environ.get("HWT_MGT_DATASET", "scaled_stratified_pool_8980.json")
 runner.OUTPUT_DIR = HERE / "results"
-CHECKPOINT = runner.OUTPUT_DIR / "scaled_stratified_pool_8980_metrics.partial.json"
-FINAL_JSON = runner.OUTPUT_DIR / "scaled_stratified_pool_8980_metrics.json"
-FINAL_MD = runner.OUTPUT_DIR / "scaled_stratified_pool_8980_metrics.md"
+DATASET_STEM = runner.DATASET.stem
+CHECKPOINT = runner.OUTPUT_DIR / f"{DATASET_STEM}_metrics.partial.json"
+FINAL_JSON = runner.OUTPUT_DIR / f"{DATASET_STEM}_metrics.json"
+FINAL_MD = runner.OUTPUT_DIR / f"{DATASET_STEM}_metrics.md"
 
 
 def save_checkpoint(results, metadata):
-    CHECKPOINT.write_text(
-        json.dumps({"metadata": metadata, "results": results}, indent=2, ensure_ascii=False, default=runner.scalarize),
-        encoding="utf-8",
+    # Write beside the checkpoint and replace it only after the complete JSON
+    # has been flushed.  This also recovers cleanly from an interrupted write
+    # or a transient Windows file-handle error.
+    payload = json.dumps(
+        {"metadata": metadata, "results": results},
+        indent=2,
+        ensure_ascii=False,
+        default=runner.scalarize,
     )
+    temporary = CHECKPOINT.with_name(CHECKPOINT.name + ".tmp")
+    temporary.write_text(payload, encoding="utf-8")
+    os.replace(temporary, CHECKPOINT)
 
 
 def release_safe(*models):

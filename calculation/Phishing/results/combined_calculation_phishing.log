@@ -1,0 +1,4 @@
+[INFO] Loading spaCy model: en_core_web_sm
+WROTE D:\AI\projects\e-phishGen\calculation\Phishing\results\combined_calculation_phishing_metrics.json
+WROTE D:\AI\projects\e-phishGen\calculation\Phishing\results\combined_calculation_phishing_metrics.md
+SAMPLES 2352 FEATURES 16

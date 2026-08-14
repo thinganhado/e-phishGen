@@ -214,13 +214,21 @@ def calculate_embeddings(result, text, model, tokenizer):
 
 
 def calculate_perturbation(result, text, base_model, base_tokenizer, mask_model, mask_tokenizer):
-    original_logits, original_labels = score_text(text, base_model, base_tokenizer)
+    # DetectGPT's T5 fill model can return an empty fill for long documents
+    # when its old 150-token output cap is exceeded. Use the same 350-word
+    # input cap as the DNA-GPT adapter and a larger fill budget.
+    perturb_input = dna_gpt.truncate_words(text, max_words=350)
+    original_logits, original_labels = score_text(perturb_input, base_model, base_tokenizer)
     original_ll = average_log_probability(original_logits, original_labels)
     original_lr = mean_log_rank(original_logits, original_labels)
     perturbed = detectgpt.perturb_texts(
-        [text] * PERTURBATIONS, mask_model, mask_tokenizer,
-        device=DEVICE, max_length=150,
+        [perturb_input] * PERTURBATIONS, mask_model, mask_tokenizer,
+        device=DEVICE, max_length=512,
     )
+    # A failed fill is returned as an empty string by the adapter. Keep the
+    # metric defined for this sample rather than passing an empty sequence to
+    # the language model, which causes a zero-length reshape error.
+    perturbed = [item if str(item).strip() else perturb_input for item in perturbed]
     perturbed_ll = []
     perturbed_lr = []
     for item in perturbed:
@@ -241,7 +249,18 @@ def calculate_fast_detect(result, text, model, tokenizer):
 
 
 def calculate_dna(result, text, model, tokenizer):
-    prompt = dna_gpt.build_prompt(text)
+    # Word counts are not token counts; long HWT messages can exceed GPT-2's
+    # 1024-token context even after the old 350-word truncation. Select a
+    # token-safe prompt before generation and continuation scoring.
+    prompt = None
+    for max_words in (180, 140, 100, 70, 40):
+        candidate = dna_gpt.build_prompt(text, max_words=max_words)
+        token_count = len(tokenizer(candidate["text"], add_special_tokens=False).input_ids)
+        if token_count <= 900:
+            prompt = candidate
+            break
+    if prompt is None:
+        prompt = dna_gpt.build_prompt(text, max_words=20)
     encoded = tokenizer(prompt["prefix"], return_tensors="pt").to(DEVICE)
     with torch.no_grad():
         generated = model.generate(
